@@ -1,9 +1,0 @@
-@* XMLBrowse Template File *@
-@(param: Any)
-def sayHello = Action(parse.xml) { request =>
-  (request.body \\ "name" headOption).map(_.text).map { name =>
-    Ok("Hello " + name)
-  }.getOrElse {
-    BadRequest("Missing parameter [name]")
-  }
-}
