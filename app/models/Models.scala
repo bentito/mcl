@@ -2,6 +2,7 @@ package models
 
 import models.utils._
 import java.util.{ Date }
+import java.net.URL
 
 import play.api.Play.current
 import play.api.cache._
@@ -11,6 +12,19 @@ import scala.language.postfixOps
 
 case class Company(id: Option[Long] = None, name: String)
 case class Computer(id: Option[Long] = None, name: String, introduced: Option[Date], discontinued: Option[Date], companyId: Option[Long])
+
+case class Item(
+  name: String,
+  description: String,
+  imageThumbURL: URL,
+  imageLargeURL: URL)
+
+case class OurProduct(
+  item: Item,
+  UUID: String,
+  price: String)
+
+case class Food(item: Item)
 
 /**
  * Helper for pagination.
@@ -76,24 +90,28 @@ object Computer {
       println("debug: loaded XML from file")
       cachedLoadElem
     }
-    
+
     val records = buildRecords(loadElem)
 
     //    Computer(id: Option[Long] = None, name: String, introduced: Option[Date], discontinued: Option[Date], companyId: Option[Long])
     val computers = Computer(Option(1001L), "ComputerFoo", None, None, Option(1002L))
     val company = Company(Option(1003L), "CompanyFoo")
-//    val seqCC = Seq((computers, Option(company)))
-//    println(seqCC)
+    //    val seqCC = Seq((computers, Option(company)))
+    //    println(seqCC)
 
     Page(records, page, offest, 1)
   }
 
-  def buildRecords (loadElem : Elem) = {
+  def buildRecords(loadElem: Elem) = {
     val catList = XMLUtil.getContentNames(loadElem)
-    XMLUtil.getDataAsMap(loadElem)
-    for (cat <- catList) yield (Computer(Option(1001L), cat, None, None, Option(1002L)), Option(Company(Option(1003L), "CompanyFoo")))
+    val dataMap = XMLUtil.getDataAsMap(loadElem)
+    val productList = dataMap("Products").map (x => x.asInstanceOf[OurProduct])
+    println(productList(0).item.name)
+
+    //    val productNameList = productList.map(x => x.getName())
+    for (cat <- productList) yield (Computer(Option(1001L), cat.item.name, None, None, Option(1002L)), Option(Company(Option(1003L), "CompanyFoo")))
   }
-  
+
   /**
    * Update a computer.
    *

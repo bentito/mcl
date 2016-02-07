@@ -1,22 +1,10 @@
 package models.utils
 import scala.xml._
 import java.net.URL
+import models._
 
 object XMLUtil {
   val levelAboveCategories = "Content"
-
-  case class Item(
-    name: String,
-    description: String,
-    imageThumbURL: URL,
-    imageLargeURL: URL)
-
-  case class Product(
-    item: Item,
-    UUID: String,
-    price: String)
-
-  case class Food(item: Item)
 
   def getContentVals(rootNode: Elem): NodeSeq = {
     val nodeSeq: NodeSeq = rootNode \\ levelAboveCategories \ "_"
@@ -32,7 +20,7 @@ object XMLUtil {
     getContentNames(rootNode).length
   }
 
-  def procProd(node: Node): Seq[Product] = {
+  def procProd(node: Node): Seq[OurProduct] = {
     val names: Seq[String] = Seq((node \ "Name").text)
     val UUIDs: Seq[String] = Seq((node \ "UUID").text)
     val descs: Seq[String] = Seq((node \ "Description").text)
@@ -40,7 +28,7 @@ object XMLUtil {
     val imageThumbURLs: Seq[String] = Seq((node \\ "Thumb").text)
     val imageLargeURLs: Seq[String] = Seq((node \\ "Large").text)
     val itemsList = List(names, descs, imageThumbURLs, imageLargeURLs, UUIDs, prices).transpose
-    val productsList = itemsList.map(x => Product(Item(x(0), x(1), new URL(x(2)), new URL(x(3))), x(4), x(5)))
+    val productsList = itemsList.map(x => OurProduct(Item(x(0), x(1), new URL(x(2)), new URL(x(3))), x(4), x(5)))
     return productsList
   }
 
