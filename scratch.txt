@@ -1,0 +1,5 @@
+		        @select(
+				   myForm("foo"),
+				   options(Seq("01 hour","02 hour","03 hour","Never end")),
+				   '_label -> "Categories to Show", '_default -> "-- Select duration --"
+				)

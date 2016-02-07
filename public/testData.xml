@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Content>
+    <Food>
+        <Item>
+            <Name>Bagel</Name>
+            <Description>A delicious bagel</Description>
+            <Image>
+                <Thumb>http://lorempixel.com/200/150/food/</Thumb>
+                <Large>http://lorempixel.com/400/300/food/</Large>
+            </Image>
+        </Item>
+        <Item>
+            <Name>Omelet</Name>
+            <Description>A very tasty omelet</Description>
+            <Image>
+                <Thumb>http://lorempixel.com/200/150/food/</Thumb>
+                <Large>http://lorempixel.com/400/300/food/</Large>
+            </Image>
+        </Item>
+        <Item>
+            <Name>Salad</Name>
+            <Description>A really leafy and tasty Salad</Description>
+            <Image>
+                <Thumb>http://lorempixel.com/200/150/food/</Thumb>
+                <Large>http://lorempixel.com/400/300/food/</Large>
+            </Image>
+        </Item>
+        <Item>
+            <Name>Curry</Name>
+            <Description>A hearty and spicy meal</Description>
+            <Image>
+                <Thumb>http://lorempixel.com/200/150/food/</Thumb>
+                <Large>http://lorempixel.com/400/300/food/</Large>
+            </Image>
+        </Item>
+    </Food>
+    <Products>
+        <Item>
+            <Name>Baking Pan</Name>
+            <UUID>200dc979-b1a1-4d31-9113-e4512f70c4b5</UUID>
+            <Description>This lovely baking pan will be a great addition to any chef's home. Use it to make cookies, pastries, or even to cook chicken or meals in.</Description>
+            <Price>14.99</Price>
+            <Image>
+                <Thumb>http://lorempixel.com/200/150/food/</Thumb>
+                <Large>http://lorempixel.com/400/300/food/</Large>
+            </Image>
+        </Item>
+        <Item>
+            <Name>Blender</Name>
+            <UUID>7ac7ffdf-cc2d-4a2e-a637-85c0efb48595</UUID>
+            <Description>This amazing blender comes with 5 settings and help you get started on your smoothie summer plans! Just whip up some berries and you'll be relaxing in no time. Comes with lifetime warrantee and our guarantee that you'll love it or your money back.</Description>
+            <Price>29.99</Price>
+            <Image>
+                <Thumb>http://lorempixel.com/200/150/food/</Thumb>
+                <Large>http://lorempixel.com/400/300/food/</Large>
+            </Image>
+        </Item>
+        <Item>
+            <Name>Collander</Name>
+            <UUID>6fd3744f-9383-4ffb-91b2-e170d872a50e</UUID>
+            <Description>Take away the strain from your strainer! This titanium Collander comes with an extending handle to match any sink! Skip the balancing act when you're draining and straining your water from meals or vegetables. Handle extends up to 15 feet. </Description>
+            <Price>15.99</Price>
+            <Image>
+                <Thumb>http://lorempixel.com/200/150/food/</Thumb>
+                <Large>http://lorempixel.com/400/300/food/</Large>
+            </Image>
+        </Item>
+        <Item>
+            <Name>Knife</Name>
+            <UUID>dac71110-58b8-4a15-b34a-168e653014e6</UUID>
+            <Description>It slices, it dices, it's environmentally friendly! This titanium knife comes with a bone handle made from the strongest bones on the planet: Chickens! Get a slice of your life together with this life-time warrantee, satisfaction guaranteed one of a kind deal.</Description>
+            <Price>9.99</Price>
+            <Image>
+                <Thumb>http://lorempixel.com/200/150/food/</Thumb>
+                <Large>http://lorempixel.com/400/300/food/</Large>
+            </Image>
+        </Item>
+    </Products>
+</Content>
