@@ -36,15 +36,15 @@ import views._
 import models._
 
 object Application extends Controller {
-    /**
+  /**
    * This result directly redirect to the application home.
    */
   val Home = Redirect(routes.Application.list(1, 2, ""))
-  
-   /**
+
+  /**
    * Describe the item form (used in both edit and create screens).
-   */ 
-  
+   */
+
   val computerForm = Form(
     mapping(
       "name" -> text,
@@ -52,25 +52,25 @@ object Application extends Controller {
       "thumbURL" -> text,
       "largeURL" -> text,
       "uuid" -> text,
-      "price" -> text
-    )(OurProduct.apply)(OurProduct.unapply)
-  )
+      "price" -> text)(OurProduct.apply)(OurProduct.unapply))
 
   case class catCountRequest(catCount: String)
 
+  // helper method, not used
   def getCatCount = Action { implicit request =>
     val catCountRequest = initForm.bindFromRequest.get
     Ok(s"Category Count Requested: '${catCountRequest.catCount}'")
   }
 
+  // not used
   def initForm = Form(mapping("catCount" -> text)(catCountRequest.apply)(catCountRequest.unapply))
 
-    /**
+  /**
    * Handle default path requests, redirect to item list
-   */  
+   */
   def index = Action { Home }
-  
-    /**
+
+  /**
    * Display the paginated list of items.
    *
    * @param page Current page number (starts from 0)
@@ -79,32 +79,30 @@ object Application extends Controller {
    */
   def list(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
     Ok(html.list(
-      OurProduct.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
-      orderBy, filter
-    ))
+      OurProduct.list(page = page, orderBy = orderBy, filter = ("%" + filter + "%")),
+      orderBy, filter))
   }
-  
-    /**
+
+  /**
    * Display the 'new item form'.
    */
   def create = Action {
     Ok(views.html.createForm(computerForm, Company.options))
   }
-  
-    /**
+
+  /**
    * Handle the 'new computer form' submission.
    */
   def save = Action { implicit request =>
     computerForm.bindFromRequest.fold(
-      formWithErrors => BadRequest(html.createForm(formWithErrors, Seq(("fooCoOpts1","fooCoOpt2")))),
+      formWithErrors => BadRequest(html.createForm(formWithErrors, Seq(("fooCoOpts1", "fooCoOpt2")))),
       product => {
         OurProduct.insert(product)
         Home.flashing("success" -> "Item %s has been created".format(product.name))
-      }
-    )
+      })
   }
-  
-   /**
+
+  /**
    * Display the 'edit form' of a existing Item.
    *
    * @param id Id of the item to edit
@@ -114,9 +112,9 @@ object Application extends Controller {
       Ok(html.editForm(id, computerForm.fill(product), Company.options))
     }.getOrElse(NotFound)
   }
-  
-   /**
-   * Handle the 'edit form' submission 
+
+  /**
+   * Handle the 'edit form' submission
    *
    * @param id Id of the item to edit
    */
@@ -128,8 +126,8 @@ object Application extends Controller {
         Home.flashing("success" -> "Item %s has been updated".format(product.name))
       })
   }
-  
-    /**
+
+  /**
    * Handle item deletion.
    */
   def delete(id: Long) = Action {

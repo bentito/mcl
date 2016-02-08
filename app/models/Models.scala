@@ -31,8 +31,7 @@ case class Food(
   name: String,
   description: String,
   imageThumbURL: String,
-  imageLargeURL: String
-)
+  imageLargeURL: String)
 
 /**
  * Helper for pagination.

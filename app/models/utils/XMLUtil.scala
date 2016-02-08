@@ -57,14 +57,14 @@ object XMLUtil {
       productsXML.map { product => procProd(product)
       }
     val productsFlat = products.flatten
-//        printf("debug: %s category items have names: %s\n", "Products", productsFlat)
+    //        printf("debug: %s category items have names: %s\n", "Products", productsFlat)
 
     val foodsXML: NodeSeq = rootNode \ "Food" \ "_"
     val foods =
       foodsXML.map { food => procFood(food)
       }
     val foodsFlat = foods.flatten
-//        printf("debug: %s category items have names: %s\n", "Food", foodsFlat)
+    //        printf("debug: %s category items have names: %s\n", "Food", foodsFlat)
 
     val retMap = Map("Products" -> productsFlat, "Food" -> foodsFlat)
     return retMap
