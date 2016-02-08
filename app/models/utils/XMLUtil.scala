@@ -1,8 +1,14 @@
+/*
+ * Meredith Content Licensing Code Challenge
+ * 
+ * Brett Tofel 2016
+ */
 package models.utils
 import scala.xml._
 import java.net.URL
 import models._
 
+/* consolidates functions for handling XML data */
 object XMLUtil {
   val levelAboveCategories = "Content"
 
@@ -42,6 +48,9 @@ object XMLUtil {
     return foodsList
   }
 
+  /* gets all the categories we have a proc<Category> method for,
+   * returns the results in a Map keyed by category name.
+   */
   def getDataAsMap(rootNode: Elem): Map[String, Seq[Any]] = {
     val productsXML: NodeSeq = rootNode \ "Products" \ "_"
     val products =
@@ -63,7 +72,7 @@ object XMLUtil {
 
   def main(args: Array[String]): Unit = {
     val loadElem = xml.XML.loadFile("/Users/bentito/workspace/mcl/public/testData.xml")
-    println("loaded XML")
+    println("debug from XMLUtil.main: loaded XML")
     println("getDataAsMap: " + getDataAsMap(loadElem))
   }
 }

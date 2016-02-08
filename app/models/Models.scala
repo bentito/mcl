@@ -1,3 +1,8 @@
+/*
+ * Meredith Content Licensing Code Challenge
+ * 
+ * Brett Tofel 2016
+ */
 package models
 
 import models.utils._
@@ -10,15 +15,10 @@ import play.api.cache._
 import scala.xml._
 import scala.language.postfixOps
 
-case class Company(id: Option[Long] = None, name: String)
-//case class Computer(id: Option[Long] = None, name: String, introduced: Option[Date], discontinued: Option[Date], companyId: Option[Long])
+case class Company(id: Option[Long] = None, name: String) // cruft from CRUD example TODO: Remove
 
-//case class Item(
-//  name: String,
-//  description: String,
-//  imageThumbURL: URL,
-//  imageLargeURL: URL)
-
+//TODO: Need polymorphic approach, stymied by mapping to apply,unapply paradigm for now,
+//TODO: both these classes extend abstract class Items
 case class OurProduct(
   name: String,
   description: String,
@@ -44,55 +44,28 @@ case class Page[A](items: Seq[A], page: Int, offset: Long, total: Long) {
 
 object OurProduct {
 
-  // -- Parsers
-
   /**
-   * Parse a Computer from a ResultSet
-   */
-  //  val simple = {
-  //    get[Option[Long]]("computer.id") ~
-  //    get[String]("computer.name") ~
-  //    get[Option[Date]]("computer.introduced") ~
-  //    get[Option[Date]]("computer.discontinued") ~
-  //    get[Option[Long]]("computer.company_id") map {
-  //      case id~name~introduced~discontinued~companyId => Computer(id, name, introduced, discontinued, companyId)
-  //    }
-  //  }
-
-  /**
-   * Parse a (Computer,Company) from a ResultSet
-   */
-  //  val withCompany = Computer.simple ~ (Company.simple ?) map {
-  //    case computer~company => (computer,company)
-  //  }
-
-  // -- Queries
-
-  /**
-   * Retrieve a computer from the id.
+   * Retrieve a product from the id.
    */
   def findById(id: Long): Option[OurProduct] = {
-    //    DB.withConnection { implicit connection =>
-    //      SQL("select * from computer where id = {id}").on('id -> id).as(Computer.simple.singleOpt)
-    //    }
-//    val dummyItem = Item("dummyName", "dummyDesc", new URL("http://foo.com"), new URL("http://foo.com"))
     val dummyProduct = OurProduct("dummyName", "dummyDesc", "http://foo.com", "http://foo.com", "UUIDfoo", "priceFoo")
     val products = dummyProduct
     Option(products)
   }
 
   /**
-   * Return a page of (Computer,Company).
+   * Return a page of (OurProduct,Company).
    *
    * @param page Page to display
-   * @param pageSize Number of computers per page
-   * @param orderBy Computer property used for sorting
+   * @param pageSize Number of products per page
+   * @param orderBy A property used for sorting
    * @param filter Filter applied on the name column
    */
-  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(OurProduct, Option[Company])] = {
+  def list(page: Int = 0, pageSize: Int = 4, orderBy: Int = 1, filter: String = "%"): Page[(OurProduct, Option[Company])] = {
 
     val offest = pageSize * page
 
+    // Load XML from cache, do this only once TODO: Test this more
     val loadElem: Elem = Cache.getOrElse("load.elem") {
       val loadData = new models.LoadData
       val cachedLoadElem = loadData.loadElem
@@ -103,14 +76,6 @@ object OurProduct {
 
     val records = buildRecords(loadElem)
 
-    //    Computer(id: Option[Long] = None, name: String, introduced: Option[Date], discontinued: Option[Date], companyId: Option[Long])
-//    val dummyItem = Item("dummyName", "dummyDesc", new URL("http://foo.com"), new URL("http://foo.com"))
-//    val dummyProduct = OurProduct("dummyName", "dummyDesc", "http://foo.com", "http://foo.com", "UUIDfoo", "priceFoo")
-//    val products = dummyProduct
-//    val company = Company(Option(1003L), "CompanyFoo")
-    //    val seqCC = Seq((computers, Option(company)))
-    //    println(seqCC)
-
     Page(records, page, offest, 1)
   }
 
@@ -120,84 +85,43 @@ object OurProduct {
     val productList = dataMap("Products").map(x => x.asInstanceOf[OurProduct])
     val foodList = dataMap("Food").map(x => x.asInstanceOf[Food])
 
-    // NB: product.item.name works to ref this param 
+    // Note: product.item.name works to ref this param TODO: bring back Item or some polymorphic help
     for (product <- productList) yield (product, Option(Company(Option(1003L), "CompanyFoo")))
   }
 
   /**
-   * Update a computer.
+   * TODO: Can remove.
    *
    * @param id The computer id
    * @param computer The computer values.
    */
   def update(id: Long, product: OurProduct) = {
-    //    DB.withConnection { implicit connection =>
-    //      SQL(
-    //        """
-    //          update computer
-    //          set name = {name}, introduced = {introduced}, discontinued = {discontinued}, company_id = {company_id}
-    //          where id = {id}
-    //        """
-    //      ).on(
-    //        'id -> id,
-    //        'name -> computer.name,
-    //        'introduced -> computer.introduced,
-    //        'discontinued -> computer.discontinued,
-    //        'company_id -> computer.companyId
-    //      ).executeUpdate()
-    //    }
     true
   }
 
   /**
-   * Insert a new computer.
+   * TODO: Can remove.
    *
    * @param computer The computer values.
    */
   def insert(product: OurProduct) = {
-    //    DB.withConnection { implicit connection =>
-    //      SQL(
-    //        """
-    //          insert into computer values (
-    //            (select next value for computer_seq), 
-    //            {name}, {introduced}, {discontinued}, {company_id}
-    //          )
-    //        """
-    //      ).on(
-    //        'name -> computer.name,
-    //        'introduced -> computer.introduced,
-    //        'discontinued -> computer.discontinued,
-    //        'company_id -> computer.companyId
-    //      ).executeUpdate()
-    //    }
+
     true
   }
 
   /**
-   * Delete a computer.
+   * TODO: Can remove.
    *
    * @param id Id of the computer to delete.
    */
   def delete(id: Long) = {
-    //    DB.withConnection { implicit connection =>
-    //      SQL("delete from computer where id = {id}").on('id -> id).executeUpdate()
-    //    }
     true
   }
 
 }
 
+//TODO: Can remove.
 object Company {
-
-  /**
-   * Parse a Company from a ResultSet
-   */
-  //  val simple = {
-  //    get[Option[Long]]("company.id") ~
-  //    get[String]("company.name") map {
-  //      case id~name => Company(id, name)
-  //    }
-  //  }
 
   /**
    * Construct the Map[String,String] needed to fill a select options set.

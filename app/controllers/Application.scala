@@ -55,17 +55,6 @@ object Application extends Controller {
       "price" -> text
     )(OurProduct.apply)(OurProduct.unapply)
   )
-  
-//  def welcome = Action {
-//    val loadData = new models.LoadData
-//    val loadElem = loadData.loadElem
-//    Cache.set("load.elem", loadElem) // val cachedLoadElem = Cache.get("load.elem")  
-//    // can get the cached XML from anywhere with above get() call. 
-//    val catCount = models.utils.XMLUtil.countCats(loadElem)
-//    val catList = models.utils.XMLUtil.getContentNames(loadElem)
-//    //    println("cats: " + models.utils.XMLUtil.getContentName(loadElem))
-//    Ok(views.html.home("MCL Code Challenge", catList))
-//  }
 
   case class catCountRequest(catCount: String)
 
