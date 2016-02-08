@@ -30,6 +30,8 @@ import play.api.Play.current
 import play.api.data._
 import play.api.data.Forms._
 
+import java.net.URL
+
 import views._
 import models._
 
@@ -37,19 +39,21 @@ object Application extends Controller {
     /**
    * This result directly redirect to the application home.
    */
-  val Home = Redirect(routes.Application.list(1, 2, "foo"))
+  val Home = Redirect(routes.Application.list(1, 2, ""))
   
    /**
-   * Describe the computer form (used in both edit and create screens).
+   * Describe the item form (used in both edit and create screens).
    */ 
+  
   val computerForm = Form(
     mapping(
-      "id" -> ignored(None:Option[Long]),
-      "name" -> nonEmptyText,
-      "introduced" -> optional(date("yyyy-MM-dd")),
-      "discontinued" -> optional(date("yyyy-MM-dd")),
-      "company" -> optional(longNumber)
-    )(Computer.apply)(Computer.unapply)
+      "name" -> text,
+      "description" -> text,
+      "thumbURL" -> text,
+      "largeURL" -> text,
+      "uuid" -> text,
+      "price" -> text
+    )(OurProduct.apply)(OurProduct.unapply)
   )
   
 //  def welcome = Action {
@@ -73,26 +77,26 @@ object Application extends Controller {
   def initForm = Form(mapping("catCount" -> text)(catCountRequest.apply)(catCountRequest.unapply))
 
     /**
-   * Handle default path requests, redirect to computers list
+   * Handle default path requests, redirect to item list
    */  
   def index = Action { Home }
   
     /**
-   * Display the paginated list of computers.
+   * Display the paginated list of items.
    *
    * @param page Current page number (starts from 0)
    * @param orderBy Column to be sorted
-   * @param filter Filter applied on computer names
+   * @param filter Filter applied on item names
    */
   def list(page: Int, orderBy: Int, filter: String) = Action { implicit request =>
     Ok(html.list(
-      Computer.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
+      OurProduct.list(page = page, orderBy = orderBy, filter = ("%"+filter+"%")),
       orderBy, filter
     ))
   }
   
     /**
-   * Display the 'new computer form'.
+   * Display the 'new item form'.
    */
   def create = Action {
     Ok(views.html.createForm(computerForm, Company.options))
@@ -104,43 +108,43 @@ object Application extends Controller {
   def save = Action { implicit request =>
     computerForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.createForm(formWithErrors, Seq(("fooCoOpts1","fooCoOpt2")))),
-      computer => {
-        Computer.insert(computer)
-        Home.flashing("success" -> "Computer %s has been created".format(computer.name))
+      product => {
+        OurProduct.insert(product)
+        Home.flashing("success" -> "Item %s has been created".format(product.name))
       }
     )
   }
   
    /**
-   * Display the 'edit form' of a existing Computer.
+   * Display the 'edit form' of a existing Item.
    *
-   * @param id Id of the computer to edit
+   * @param id Id of the item to edit
    */
   def edit(id: Long) = Action {
-    Computer.findById(id).map { computer =>
-      Ok(html.editForm(id, computerForm.fill(computer), Company.options))
+    OurProduct.findById(id).map { product =>
+      Ok(html.editForm(id, computerForm.fill(product), Company.options))
     }.getOrElse(NotFound)
   }
   
    /**
    * Handle the 'edit form' submission 
    *
-   * @param id Id of the computer to edit
+   * @param id Id of the item to edit
    */
   def update(id: Long) = Action { implicit request =>
     computerForm.bindFromRequest.fold(
       formWithErrors => BadRequest(html.editForm(id, formWithErrors, Company.options)),
-      computer => {
-        Computer.update(id, computer)
-        Home.flashing("success" -> "Computer %s has been updated".format(computer.name))
+      product => {
+        OurProduct.update(id, product)
+        Home.flashing("success" -> "Item %s has been updated".format(product.name))
       })
   }
   
     /**
-   * Handle computer deletion.
+   * Handle item deletion.
    */
   def delete(id: Long) = Action {
-    Computer.delete(id)
-    Home.flashing("success" -> "Computer has been deleted")
+    OurProduct.delete(id)
+    Home.flashing("success" -> "Item has been deleted")
   }
 }

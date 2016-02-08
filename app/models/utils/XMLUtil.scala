@@ -28,7 +28,7 @@ object XMLUtil {
     val imageThumbURLs: Seq[String] = Seq((node \\ "Thumb").text)
     val imageLargeURLs: Seq[String] = Seq((node \\ "Large").text)
     val itemsList = List(names, descs, imageThumbURLs, imageLargeURLs, UUIDs, prices).transpose
-    val productsList = itemsList.map(x => OurProduct(Item(x(0), x(1), new URL(x(2)), new URL(x(3))), x(4), x(5)))
+    val productsList = itemsList.map(x => OurProduct(x(0), x(1), x(2), x(3), x(4), x(5)))
     return productsList
   }
 
@@ -38,7 +38,7 @@ object XMLUtil {
     val imageThumbURLs: Seq[String] = Seq((node \\ "Thumb").text)
     val imageLargeURLs: Seq[String] = Seq((node \\ "Large").text)
     val itemsList = List(names, descs, imageThumbURLs, imageLargeURLs).transpose
-    val foodsList = itemsList.map(x => Food(Item(x(0), x(1), new URL(x(2)), new URL(x(3)))))
+    val foodsList = itemsList.map(x => Food(x(0), x(1), x(2), x(3)))
     return foodsList
   }
 
@@ -48,14 +48,14 @@ object XMLUtil {
       productsXML.map { product => procProd(product)
       }
     val productsFlat = products.flatten
-    //    printf("debug: %s category items have names: %s\n", "Products", productsFlat)
+//        printf("debug: %s category items have names: %s\n", "Products", productsFlat)
 
     val foodsXML: NodeSeq = rootNode \ "Food" \ "_"
     val foods =
       foodsXML.map { food => procFood(food)
       }
     val foodsFlat = foods.flatten
-    //    printf("debug: %s category items have names: %s\n", "Food", foodsFlat)
+//        printf("debug: %s category items have names: %s\n", "Food", foodsFlat)
 
     val retMap = Map("Products" -> productsFlat, "Food" -> foodsFlat)
     return retMap
@@ -64,6 +64,6 @@ object XMLUtil {
   def main(args: Array[String]): Unit = {
     val loadElem = xml.XML.loadFile("/Users/bentito/workspace/mcl/public/testData.xml")
     println("loaded XML")
-    getDataAsMap(loadElem)
+    println("getDataAsMap: " + getDataAsMap(loadElem))
   }
 }

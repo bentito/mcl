@@ -1,4 +1,4 @@
-@(currentPage: Page[(Computer, Option[Company])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
+@(currentPage: Page[(OurProduct, Option[Company])], currentOrderBy: Int, currentFilter: String)(implicit flash: play.api.mvc.Flash)
 
 @****************************************
 * Helper generating navigation links    *
@@ -22,7 +22,7 @@
         
 @main {
     
-    <h1>@Messages("computers.list.title", currentPage.total)</h1>
+    <h1>@Messages("Items from the database", currentPage.total)</h1>
 
     @flash.get("success").map { message =>
         <div class="alert-message warning">
@@ -33,39 +33,39 @@
     <div id="actions">
         
         @helper.form(action=routes.Application.list()) {
-            <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by computer name...">
+            <input type="search" id="searchbox" name="f" value="@currentFilter" placeholder="Filter by item name...">
             <input type="submit" id="searchsubmit" value="Filter by name" class="btn primary">
         }
         
-        <a class="btn success" id="add" href="@routes.Application.create()">Add a new computer</a>
+        @*<a class="btn success" id="add" href="@routes.Application.create()">Add a new product</a>*@
         
     </div>
     
-    @Option(currentPage.items).filterNot(_.isEmpty).map { computers =>
+    @Option(currentPage.items).filterNot(_.isEmpty).map { products =>
         
-        <table class="computers zebra-striped">
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    @header(2, "Computer name")
-                    @header(3, "Introduced")
-                    @header(4, "Discontinued")
-                    @header(5, "Company")
+                    @header(2, "Item name")
+                    @header(3, "Item name")
+                    @header(4, "Item name")
+                    @header(5, "Item name")
                 </tr>
             </thead>
             <tbody>
 
-                @computers.map { 
-                    case (computer, company) => {
+                @products.map { 
+                    case (product, company) => {
                         <tr>
-                            <td><a href="@routes.Application.edit(computer.id.get)">@computer.name</a></td>
+                            <td><a href="@routes.Application.edit(1000L)">@product.name</a></td>
                             <td>
-                                @computer.introduced.map(_.format("dd MMM yyyy")).getOrElse { <em>-</em> }
+                                @product.name
                             </td>
                             <td>
-                                @computer.discontinued.map(_.format("dd MMM yyyy")).getOrElse { <em>-</em> }
+                                @product.name
                             </td>
                             <td>
-                                @company.map(_.name).getOrElse { <em>-</em> }
+                                @product.name
                             </td>
                         </tr>
                     }
@@ -86,7 +86,7 @@
                     </li>
                 }
                 <li class="current">
-                    <a>Displaying @(currentPage.offset + 1) to @(currentPage.offset + computers.size) of @currentPage.total</a>
+                    <a>Displaying @(currentPage.offset + 1) to @(currentPage.offset + products.size) of @currentPage.total</a>
                 </li>
                 @currentPage.next.map { page =>
                     <li class="next">

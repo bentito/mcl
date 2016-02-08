@@ -1,12 +1,12 @@
-@(computerForm: Form[Computer], companies: Seq[(String, String)])
+@(computerForm: Form[OurProduct], companies: Seq[(String, String)])
 
 @import helper._
 
 @implicitFieldConstructor = @{ FieldConstructor(twitterBootstrapInput.f) } 
 
-@main {
+@main (""){
     
-    <h1>Add a computer</h1>
+    <h1>List of Products</h1>
     
     @form(routes.Application.save()) {
         

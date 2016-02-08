@@ -11,20 +11,28 @@ import scala.xml._
 import scala.language.postfixOps
 
 case class Company(id: Option[Long] = None, name: String)
-case class Computer(id: Option[Long] = None, name: String, introduced: Option[Date], discontinued: Option[Date], companyId: Option[Long])
+//case class Computer(id: Option[Long] = None, name: String, introduced: Option[Date], discontinued: Option[Date], companyId: Option[Long])
 
-case class Item(
-  name: String,
-  description: String,
-  imageThumbURL: URL,
-  imageLargeURL: URL)
+//case class Item(
+//  name: String,
+//  description: String,
+//  imageThumbURL: URL,
+//  imageLargeURL: URL)
 
 case class OurProduct(
-  item: Item,
+  name: String,
+  description: String,
+  imageThumbURL: String,
+  imageLargeURL: String,
   UUID: String,
   price: String)
 
-case class Food(item: Item)
+case class Food(
+  name: String,
+  description: String,
+  imageThumbURL: String,
+  imageLargeURL: String
+)
 
 /**
  * Helper for pagination.
@@ -34,7 +42,7 @@ case class Page[A](items: Seq[A], page: Int, offset: Long, total: Long) {
   lazy val next = Option(page + 1).filter(_ => (offset + items.size) < total)
 }
 
-object Computer {
+object OurProduct {
 
   // -- Parsers
 
@@ -63,12 +71,14 @@ object Computer {
   /**
    * Retrieve a computer from the id.
    */
-  def findById(id: Long): Option[Computer] = {
+  def findById(id: Long): Option[OurProduct] = {
     //    DB.withConnection { implicit connection =>
     //      SQL("select * from computer where id = {id}").on('id -> id).as(Computer.simple.singleOpt)
     //    }
-    val computers = Computer(Option(1001L), "ComputerFoo", None, None, Option(1002L))
-    Option(computers)
+//    val dummyItem = Item("dummyName", "dummyDesc", new URL("http://foo.com"), new URL("http://foo.com"))
+    val dummyProduct = OurProduct("dummyName", "dummyDesc", "http://foo.com", "http://foo.com", "UUIDfoo", "priceFoo")
+    val products = dummyProduct
+    Option(products)
   }
 
   /**
@@ -79,7 +89,7 @@ object Computer {
    * @param orderBy Computer property used for sorting
    * @param filter Filter applied on the name column
    */
-  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(Computer, Option[Company])] = {
+  def list(page: Int = 0, pageSize: Int = 10, orderBy: Int = 1, filter: String = "%"): Page[(OurProduct, Option[Company])] = {
 
     val offest = pageSize * page
 
@@ -94,8 +104,10 @@ object Computer {
     val records = buildRecords(loadElem)
 
     //    Computer(id: Option[Long] = None, name: String, introduced: Option[Date], discontinued: Option[Date], companyId: Option[Long])
-    val computers = Computer(Option(1001L), "ComputerFoo", None, None, Option(1002L))
-    val company = Company(Option(1003L), "CompanyFoo")
+//    val dummyItem = Item("dummyName", "dummyDesc", new URL("http://foo.com"), new URL("http://foo.com"))
+//    val dummyProduct = OurProduct("dummyName", "dummyDesc", "http://foo.com", "http://foo.com", "UUIDfoo", "priceFoo")
+//    val products = dummyProduct
+//    val company = Company(Option(1003L), "CompanyFoo")
     //    val seqCC = Seq((computers, Option(company)))
     //    println(seqCC)
 
@@ -105,11 +117,11 @@ object Computer {
   def buildRecords(loadElem: Elem) = {
     val catList = XMLUtil.getContentNames(loadElem)
     val dataMap = XMLUtil.getDataAsMap(loadElem)
-    val productList = dataMap("Products").map (x => x.asInstanceOf[OurProduct])
-    println(productList(0).item.name)
+    val productList = dataMap("Products").map(x => x.asInstanceOf[OurProduct])
+    val foodList = dataMap("Food").map(x => x.asInstanceOf[Food])
 
-    //    val productNameList = productList.map(x => x.getName())
-    for (cat <- productList) yield (Computer(Option(1001L), cat.item.name, None, None, Option(1002L)), Option(Company(Option(1003L), "CompanyFoo")))
+    // NB: product.item.name works to ref this param 
+    for (product <- productList) yield (product, Option(Company(Option(1003L), "CompanyFoo")))
   }
 
   /**
@@ -118,7 +130,7 @@ object Computer {
    * @param id The computer id
    * @param computer The computer values.
    */
-  def update(id: Long, computer: Computer) = {
+  def update(id: Long, product: OurProduct) = {
     //    DB.withConnection { implicit connection =>
     //      SQL(
     //        """
@@ -142,7 +154,7 @@ object Computer {
    *
    * @param computer The computer values.
    */
-  def insert(computer: Computer) = {
+  def insert(product: OurProduct) = {
     //    DB.withConnection { implicit connection =>
     //      SQL(
     //        """
